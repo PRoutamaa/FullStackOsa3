@@ -5,11 +5,13 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "\"Error: note test yet\""
+    "test": "echo \"Error: note test yet\" && exit 1",
+    "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PRoutamaa/FullStackOsa3.git"
+    "url": "https://github.com/PRoutamaa/FullStackOsa3.git"
   },
   "author": "Petri Routamaa",
   "license": "MIT",
