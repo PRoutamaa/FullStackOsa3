@@ -1,0 +1,28 @@
+{
+  "name": "part3tasks",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "\"Error: note test yet\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PRoutamaa/FullStackOsa3.git"
+  },
+  "author": "Petri Routamaa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PRoutamaa/FullStackOsa3/issues"
+  },
+  "homepage": "https://github.com/PRoutamaa/FullStackOsa3#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
