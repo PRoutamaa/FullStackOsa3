@@ -23,24 +23,28 @@ app.use(morgan(function (tokens, req, res) {
 
 
 app.get('/info', (req, res) => {
-  res.send(
-   `<p>Phonebook has info for ${notes.length} people </p>
+  Person.find({}).then(people => {
+    res.send(
+   `<p>Phonebook has info for ${people.length} people </p>
 
-    <p>${new Date}</p>`
-  )
+   <p>${new Date}</p>`
+    )
+  })
 })
 
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(people => {
-    console.log(people)
+    numberOfPeople = people.length
+    console.log(people.length)
     res.json(people)
   })
 })
 
-app.get(`/api/persons/:id`, (req, res) => {
+app.get(`/api/persons/:id`, (req, res, next) => {
   Person.findById(req.params.id).then(person => {
     res.json(person)
   })
+  .catch(error => next(error))
 })
 
 app.post(`/api/persons`, (req, res) => {
@@ -67,11 +71,40 @@ app.post(`/api/persons`, (req, res) => {
   
 })
 
-app.delete(`/api/persons/:id`, (req, res) => {
-  const id = req.params.id
-  notes = notes.filter(person => person.id !== id)
-  res.status(204).end()
+app.delete(`/api/persons/:id`, (req, res, next) => {
+  Person.findByIdAndDelete(req.params.id)
+  .then(result => {
+    res.status(204).end()
+  })
+  .catch(error => next(error))
 })
+
+app.put('/api/persons/:id', (req, res, next) => {
+  const body = req.body
+
+  const updatedPerson = {
+    name: body.name,
+    number: body.number,
+  }
+
+  Person.findByIdAndUpdate(req.params.id, updatedPerson, { new: true })
+    .then(updatedFile => {
+      res.json(updatedFile)
+    })
+    .catch(error => next(error))
+})
+
+const errorHandler = (error, req, res, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id' })
+  }
+
+  next(error)
+}
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT 
 app.listen(PORT, () => {
