@@ -15,9 +15,9 @@ app.use(morgan(function (tokens, req, res) {
     tokens.status(req, res),
     tokens.res(req, res, 'content-length'), '-',
     tokens['response-time'](req, res), 'ms',
-    tokens.method(req, res) === "POST"
-    ? JSON.stringify(req.body)
-    : ""
+    tokens.method(req, res) === 'POST'
+      ? JSON.stringify(req.body)
+      : ''
   ].join(' ')
 }))
 
@@ -25,7 +25,7 @@ app.use(morgan(function (tokens, req, res) {
 app.get('/info', (req, res) => {
   Person.find({}).then(people => {
     res.send(
-   `<p>Phonebook has info for ${people.length} people </p>
+      `<p>Phonebook has info for ${people.length} people </p>
 
    <p>${new Date}</p>`
     )
@@ -38,16 +38,16 @@ app.get('/api/persons', (req, res) => {
   })
 })
 
-app.get(`/api/persons/:id`, (req, res, next) => {
+app.get('/api/persons/:id', (req, res, next) => {
   Person.findById(req.params.id).then(person => {
     res.json(person)
   })
-  .catch(error => next(error))
+    .catch(error => next(error))
 })
 
-app.post(`/api/persons`, (req, res, next) => {
-  const {name, number } = req.body
-  
+app.post('/api/persons', (req, res, next) => {
+  const { name, number } = req.body
+
   const newPerson = new Person({
     name: name,
     number: number
@@ -56,20 +56,20 @@ app.post(`/api/persons`, (req, res, next) => {
   newPerson.save().then(savedPerson => {
     res.json(savedPerson)
   })
-  .catch(error => next(error))
-  
+    .catch(error => next(error))
+
 })
 
-app.delete(`/api/persons/:id`, (req, res, next) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndDelete(req.params.id)
-  .then(result => {
-    res.status(204).end()
-  })
-  .catch(error => next(error))
+    .then(() => {
+      res.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
-  const {name, number} = req.body
+  const { name, number } = req.body
 
   const updatedPerson = {
     name: name,
@@ -79,7 +79,7 @@ app.put('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndUpdate(
     req.params.id,
     updatedPerson,
-     { new: true, runValidators: true, context: 'query' })
+    { new: true, runValidators: true, context: 'query' })
     .then(updatedFile => {
       res.json(updatedFile)
     })
@@ -100,7 +100,7 @@ const errorHandler = (error, req, res, next) => {
 
 app.use(errorHandler)
 
-const PORT = process.env.PORT 
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
